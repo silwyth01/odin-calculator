@@ -1,57 +1,99 @@
 const output = document.querySelector(".output");
-const numbers = document.querySelectorAll(".number");
-const operations = document.querySelectorAll(".operation");
-const clear = document.querySelector(".all-clear");
-
-let numero = [];
-let operatio = "";
-let total = 0;
+const numbersButtons = document.querySelectorAll(".number");
+const operationsButtons = document.querySelectorAll(".operation");
+const clearButton = document.querySelector(".all-clear");
+const deleteButton = document.querySelector(".delete");
+const equalButton = document.querySelector(".equals");
 
 
+let currentNumber = '';
+let previousNumber = '';
+let operation = "";
 
-clear.addEventListener('click', () => {
-    output.innerText = null;
+function deleteMaster() {
+    currentNumber = currentNumber.slice(0, -1);
+}
+
+function clear() {
+    currentNumber = '';
+    previousNumber = '';
+    operation = "";
+}
+
+function updateDisplay() {
+    if (operation !== '') {
+        output.innerText = `${previousNumber} ${operation} ${currentNumber}`;
+    } else {
+        output.innerText = currentNumber;
+    }
+}
+
+function appendNumber(number) {
+    if (number === '.' && currentNumber.includes('.')) return;
+    if (number === '.' && currentNumber === '') {
+        currentNumber = '0';
+    }
+    currentNumber += number;
+}
+
+
+function compute() {
+    let previousRealNumber = parseFloat(previousNumber);
+    let currentRealNumber = parseFloat(currentNumber);
+    switch (operation) {
+        case '/':
+            currentNumber = previousRealNumber / currentRealNumber;
+            break;
+        case '+':
+            currentNumber = previousRealNumber + currentRealNumber;
+            break;
+        case '*':
+            currentNumber = previousRealNumber * currentRealNumber;
+            break;
+        case '-':
+            currentNumber = previousRealNumber - currentRealNumber;
+            break;
+    }
+    currentNumber = currentNumber.toString();
+    previousNumber = '';
+    operation = '';
+}
+
+function chooseOperation(operateur) {
+    if (currentNumber === "") return;
+    operation = operateur;
+    previousNumber = currentNumber;
+    currentNumber = "";
+}
+equalButton.addEventListener('click', () => {
+    compute();
+    updateDisplay();
 })
 
-operations.forEach(operation => {
+clearButton.addEventListener('click', () => {
+    clear();
+    updateDisplay();
+})
+deleteButton.addEventListener('click', () => {
+    deleteMaster();
+    updateDisplay();
+})
+
+
+operationsButtons.forEach(operation => {
     operation.addEventListener('click', () => {
-        output.innerText = operation.innerText;
-        if (output.innerText === '*') {
-            operatio = '*';
-        } else if (output.innerText === '+') {
-            operatio = '+';
-        }
-        else if (output.innerText === '÷') {
-            operatio = '/';
-        }
-        else operatio = '-';
+        chooseOperation(operation.innerText);
+        updateDisplay();
     })
 })
 
-numbers.forEach(number => {
+
+
+numbersButtons.forEach(number => {
     number.addEventListener('click', () => {
-        output.innerText = number.innerText;
+        appendNumber(number.innerText);
+        updateDisplay();
     })
 })
-
-function adder(a, b) {
-    return a + b;
-}
-
-function multiplier(a, b) {
-    return a * b;
-}
-
-function divider(a, b) {
-    return a / b;
-}
-
-function substracter(a, b) {
-    return a - b;
-}
-
-function operate(operator, num1, num2) {
-    return operator(num1, num2);
-}
 
 
