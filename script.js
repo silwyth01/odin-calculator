@@ -41,7 +41,7 @@ function compute() {
     let previousRealNumber = parseFloat(previousNumber);
     let currentRealNumber = parseFloat(currentNumber);
     switch (operation) {
-        case '/':
+        case '÷':
             currentNumber = previousRealNumber / currentRealNumber;
             break;
         case '+':
@@ -53,6 +53,7 @@ function compute() {
         case '-':
             currentNumber = previousRealNumber - currentRealNumber;
             break;
+
     }
     currentNumber = currentNumber.toString();
     previousNumber = '';
